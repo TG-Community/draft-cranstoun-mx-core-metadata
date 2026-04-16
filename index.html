@@ -1,0 +1,774 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MX Core Metadata Standard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Mozilla+Headline:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light;
+      --page-bg: #ffffff;
+      --ink: #2c2c2c;
+      --muted: #666666;
+      --rule: #e6e6e6;
+      --accent: #4b79aa;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--page-bg);
+      color: var(--ink);
+      font-family: "Mozilla Headline", sans-serif;
+      line-height: 1.42;
+    }
+    main {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 48px 36px 64px;
+    }
+    .page-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 74ch) minmax(240px, 300px);
+      gap: 56px;
+      align-items: start;
+    }
+    .doc {
+      min-width: 0;
+      font-size: 16px;
+    }
+    .doc-header {
+      margin-bottom: 1.8rem;
+    }
+    .doc-meta {
+      margin: 0 0 1.9rem;
+      font-size: 0.92rem;
+      font-family: "Mozilla Headline", sans-serif;
+    }
+    .doc-meta-row {
+      display: grid;
+      grid-template-columns: 132px minmax(0, 1fr);
+      gap: 12px;
+    }
+    .doc-meta-row + .doc-meta-row {
+      margin-top: 0.18rem;
+    }
+    .doc-meta dt,
+    .doc-meta dd {
+      margin: 0;
+    }
+    .doc-meta dt {
+      text-align: right;
+      color: var(--muted);
+    }
+    h1, h2, h3, h4 {
+      margin: 0 0 0.75rem;
+      line-height: 1.3;
+      color: var(--ink);
+      font-weight: 700;
+      font-family: "Mozilla Headline", sans-serif;
+    }
+    .doc-title {
+      font-size: 1.15rem;
+      margin-bottom: 0.3rem;
+    }
+    .doc-subtitle {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+    h2 {
+      margin-top: 1.7rem;
+      font-size: 1rem;
+    }
+    h3 {
+      margin-top: 1.35rem;
+      font-size: 1rem;
+    }
+    h4 {
+      margin-top: 1.1rem;
+      font-size: 1rem;
+    }
+    p, ul, address {
+      margin: 0 0 1em;
+      font-size: 1rem;
+    }
+    ul {
+      padding-left: 1.25rem;
+    }
+    li + li {
+      margin-top: 0.25em;
+    }
+    .toc-panel {
+      position: sticky;
+      top: 32px;
+      font-size: 0.92rem;
+    }
+    .toc-title {
+      margin: 0 0 1rem;
+      font-size: 1rem;
+      font-family: "Mozilla Headline", sans-serif;
+    }
+    .toc-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      font-family: "Mozilla Headline", sans-serif;
+    }
+    .toc-item {
+      margin: 0;
+      padding: 0;
+    }
+    .toc-item + .toc-item {
+      margin-top: 0.35rem;
+    }
+    .toc-level-2 {
+      padding-left: 1rem;
+    }
+    .toc-level-3 {
+      padding-left: 2rem;
+    }
+    .toc-level-4 {
+      padding-left: 3rem;
+    }
+    .stamp {
+      margin-top: 2rem;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+    section:first-of-type h2 {
+      margin-top: 0;
+    }
+    .boilerplate {
+      margin-bottom: 1.8rem;
+    }
+    address {
+      font-style: normal;
+    }
+    a {
+      color: var(--accent);
+      text-decoration: underline;
+    }
+    .abstract,
+    .middle,
+    .back {
+      margin-top: 1.35rem;
+    }
+    .ref-list {
+      margin: 0 0 1.2rem;
+    }
+    .ref-entry {
+      display: grid;
+      grid-template-columns: max-content minmax(0, 1fr);
+      gap: 1rem;
+      align-items: start;
+    }
+    .ref-entry + .ref-entry {
+      margin-top: 0.75rem;
+    }
+    .ref-label {
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .ref-text {
+      min-width: 0;
+    }
+    .author-address + .author-address {
+      margin-top: 1rem;
+    }
+    @media (max-width: 700px) {
+      main {
+        padding: 28px 16px 40px;
+      }
+      .page-layout {
+        grid-template-columns: 1fr;
+        gap: 36px;
+      }
+      .toc-panel {
+        position: static;
+        order: -1;
+      }
+      .doc-meta-row {
+        grid-template-columns: 108px minmax(0, 1fr);
+      }
+      .doc-meta dt {
+        text-align: left;
+      }
+      .ref-entry {
+        grid-template-columns: 1fr;
+        gap: 0.15rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="page-layout">
+      <article class="doc">
+        <header class="doc-header">
+  <dl class="doc-meta">
+    <div class="doc-meta-row"><dt>Stream Draft:</dt><dd>draft-cranstoun-mx-core-metadata</dd></div>
+    <div class="doc-meta-row"><dt>Published:</dt><dd>2026-04-16</dd></div>
+  </dl>
+  <h1 class="doc-title">MX Core Metadata Standard</h1>
+  <p class="doc-subtitle">MXS-01</p>
+</header>
+        <section class="boilerplate">
+  <h2>Status of This Memo</h2>
+  <p>This page is a rendered build of the current The Gathering draft source. Final publication status and normative effect are determined by The Gathering process.</p>
+  <h2>Copyright Notice</h2>
+  <p>Copyright (c) 2026 The Gathering and the persons identified as the document authors. All rights reserved.</p>
+  <p>This rendered output is subject to The Gathering legal and policy terms in effect on the date of publication: <a href="https://gathering.foundation/privacy-and-policies" target="_blank" rel="noreferrer">https://gathering.foundation/privacy-and-policies</a></p>
+</section>
+        <section class="abstract">
+<h2>Abstract</h2>
+<p>This document defines the core metadata vocabulary for the Machine Experience (MX) framework. It specifies the foundational fields that every MX-aware document — whether a cog file, a folder metadata file, or any carrier-format document — must, should, or may declare.</p>
+<p>The core vocabulary is organised into three groups: Zone 1 identity fields (top-level document identity), Zone 2 operational fields (governance, classification, and distribution metadata under the `mx:` namespace), and cog structural fields (fields specific to the cog document format).</p>
+<p>This standard establishes the conformance level framework (Level 1, Level 2, Level 3) that all companion MX standards adopt by reference.</p>
+<p>**Machine-readable source.** The canonical field dictionary for this standard is [`mx-canon/ssot/fields-data.yaml`](../../../mx-canon/ssot/fields-data.yaml) — a sanitised core of ~103 fields covering identity, classification, relationships, lifecycle, machine-readability infrastructure, folder metadata, cog contract, and non-YAML markup carriers. Carrier-format schemas (code, database, media) live in the companion [`mx-canon/ssot/fields-data-carriers.yaml`](../../../mx-canon/ssot/fields-data-carriers.yaml) as specified in MXS-04. Vendor extensions (e.g. `cognovamx-fields.yaml`) are out of scope for this core standard.</p>
+</section>
+<section class="middle">
+<h2 id="1-conformance">1. Conformance</h2>
+<p>The key words &quot;MUST&quot;, &quot;MUST NOT&quot;, &quot;REQUIRED&quot;, &quot;SHALL&quot;, &quot;SHALL NOT&quot;, &quot;SHOULD&quot;, &quot;SHOULD NOT&quot;, &quot;RECOMMENDED&quot;, &quot;MAY&quot;, and &quot;OPTIONAL&quot; in this document are to be interpreted as described in [RFC 2119](<a href="https://www.rfc-editor.org/rfc/rfc2119)." target="_blank" rel="noreferrer">https://www.rfc-editor.org/rfc/rfc2119).</a></p>
+<h3 id="11-conformance-levels">1.1. Conformance levels</h3>
+<p>This standard defines three conformance levels. All companion MX standards ([MX Extensions Standard](mxs-02-extensions.cog.md), [MX Provenance Standard](mxs-03-provenance.cog.md), [MX AI/Agent Policy Standard](deferred/mxs-04-ai-agent-policy.cog.md) *(deferred)*, [MX Profile-Specific Metadata Standard](deferred/mxs-05-profile-metadata.cog.md) *(deferred)*) adopt these levels by reference.</p>
+<p>| Level | Name | Requirement | Description | |-------|------|-------------|-------------| | Level 1 | **MX Core** | All MUST fields present and valid | Minimum viable MX metadata. A document at Level 1 is machine-identifiable and attributable. | | Level 2 | **MX Standard** | All MUST and SHOULD fields present | Recommended for production use. A document at Level 2 is fully classified and lifecycle-managed. | | Level 3 | **MX Complete** | All MUST, SHOULD, and applicable MAY fields present | Full metadata coverage. A document at Level 3 provides maximum context for agents and tools. |</p>
+<p>A document claiming conformance at a given level MUST satisfy all requirements at that level and all lower levels. A document claiming &quot;MX Standard&quot; (Level 2) MUST also satisfy all &quot;MX Core&quot; (Level 1) requirements.</p>
+<h3 id="12-authoritative-status">1.2. Authoritative status</h3>
+<p>This standard is an authoritative specification published by The Gathering. The field definitions, conformance requirements, and normative rules in this document are self-standing.</p>
+<p>---</p>
+<h2 id="2-scope-and-relationship-to-other-standards">2. Scope and relationship to other standards</h2>
+<h3 id="21-what-this-document-covers">2.1. What this document covers</h3>
+<p>This document specifies:</p>
+<ul>
+  <li>**Zone 1 identity fields** — top-level document identity (title, description, author, dates, version)</li>
+  <li>**Zone 2 core operational fields** — classification, governance, and distribution metadata</li>
+  <li>**Cog structural fields** — fields specific to the cog document format (.cog.md files)</li>
+  <li>**The conformance level framework** — Level 1/2/3 definitions</li>
+</ul>
+<h3 id="22-what-this-document-does-not-cover">2.2. What this document does not cover</h3>
+<p>The following are defined in companion standards:</p>
+<p>| Topic | Standard | |-------|----------| | Namespace policy, carrier formats, extension mechanisms | [MX Extensions Standard](mxs-02-extensions.cog.md) | | Trust, attribution, verification, decision records | [MX Provenance Standard](mxs-03-provenance.cog.md) | | AI governance, agent policies, training controls | [MX AI/Agent Policy Standard](deferred/mxs-04-ai-agent-policy.cog.md) *(deferred)* | | Content-type-specific fields (code, media, database, etc.) | [MX Profile-Specific Metadata Standard](deferred/mxs-05-profile-metadata.cog.md) *(deferred)* |</p>
+<h3 id="23-relationship-to-existing-standards">2.3. Relationship to existing standards</h3>
+<p>This standard builds upon:</p>
+<ul>
+  <li>**[Cog Unified Specification](../specifications/cog-unified-spec.cog.md)** — defines the cog file format that these fields populate</li>
+  <li>**[MX Standards Alignment](../specifications/mx-standards-alignment.cog.md)** — documents how MX conventions align with Schema.org, Dublin Core, and Open Graph</li>
+  <li>**[NDR-02: camelCase Naming](../naming-decisions/ndr-02-camelcase-naming.cog.md)** — all field names in this standard use camelCase</li>
+  <li>**[NDR-03: Spelling Neutrality](../naming-decisions/ndr-03-spelling-neutrality.cog.md)** — field names avoid regional spelling variants</li>
+  <li>**ISO 8601** — all date fields use YYYY-MM-DD format</li>
+  <li>**SPDX License List** — licence identifiers follow the SPDX standard</li>
+</ul>
+<p>---</p>
+<h2 id="3-terminology">3. Terminology</h2>
+<ul>
+  <li>**Cog** — A `.cog.md` file. The atomic unit of the MX document system. One file, many block types. Defined by the [Cog Unified Specification](../specifications/cog-unified-spec.cog.md).</li>
+  <li>**Zone 1** — Top-level YAML frontmatter fields (outside the `mx:` object). Document identity fields.</li>
+  <li>**Zone 2** — Fields nested under the `mx:` object in YAML frontmatter. MX-operational fields.</li>
+  <li>**Profile** — A named set of fields applicable to a specific document type (e.g., `core`, `cog`, `folder`, `book`).</li>
+  <li>**Carrier format** — The mechanism by which a non-markdown file carries MX metadata (HTML meta tags, JSDoc comments, CSS comments, etc.). Defined in the [MX Extensions Standard](mxs-02-extensions.cog.md).</li>
+  <li>**SSOT** — Single Source of Truth. The authoritative source for a given piece of information.</li>
+</ul>
+<p>---</p>
+<h2 id="4-the-two-zone-frontmatter-model">4. The two-zone frontmatter model</h2>
+<p>MX metadata in YAML frontmatter is organised into two zones:</p>
+<p>**Zone 1 (top-level):** Document identity fields. These MUST appear at the top level of the YAML frontmatter, never inside the `mx:` object.</p>
+<p>```yaml --- title: &quot;Document Title&quot; description: &quot;Brief summary for search and AI agents&quot; author: &quot;Author Name&quot; created: 2026-04-02 modified: 2026-04-16 version: &quot;1.0&quot; --- ```</p>
+<p>**Zone 2 (mx: object):** All other MX-operational fields. These MUST appear inside the `mx:` object.</p>
+<p>```yaml --- title: &quot;Document Title&quot; description: &quot;Brief summary&quot; author: &quot;Author Name&quot; created: 2026-04-02 modified: 2026-04-16 version: &quot;1.0&quot;</p>
+<p>mx: status: active contentType: guide tags: [metadata, example] audience: [humans] --- ```</p>
+<p>Implementations MUST NOT place Zone 1 fields inside the `mx:` object. Implementations MUST NOT place Zone 2 fields at the top level.</p>
+<p>---</p>
+<h2 id="5-field-definitions-zone-1-identity-fields">5. Field definitions — Zone 1 identity fields</h2>
+<h3 id="51-title">5.1. `title`</h3>
+<p>| Property | Value | |----------|-------| | **Type** | string | | **Zone** | 1 (top-level) | | **Conformance** | MUST (Level 1) | | **Default** | *(none — explicit declaration required)* |</p>
+<p>**Definition:** Human-readable document title. The canonical identity field for all documents including cog files.</p>
+<p>**Example:**</p>
+<p>```yaml title: &quot;MX Core Metadata Standard&quot; ```</p>
+<p>**Normative notes:**</p>
+<ul>
+  <li>Every MX-aware document MUST declare a `title`.</li>
+  <li>If both `title` in frontmatter and an H1 heading exist in the document body, authors SHOULD avoid duplication by omitting `title` from frontmatter and relying on the H1 heading, or vice versa.</li>
+</ul>
+<p>---</p>
+<h3 id="52-description">5.2. `description`</h3>
+<p>| Property | Value | |----------|-------| | **Type** | string | | **Zone** | 1 (top-level) | | **Conformance** | MUST (Level 1) | | **Default** | *(none — explicit declaration required)* |</p>
+<p>**Definition:** One-line summary. Used by search engines, AI agents, and registry listings.</p>
+<p>**Example:**</p>
+<p>```yaml description: &quot;Single source of truth for every YAML frontmatter field.&quot; ```</p>
+<p>**Normative notes:**</p>
+<ul>
+  <li>The value SHOULD NOT exceed 160 characters.</li>
+  <li>The description MUST be a single sentence or phrase summarising the document's purpose.</li>
+</ul>
+<p>---</p>
+<h3 id="53-author">5.3. `author`</h3>
+<p>| Property | Value | |----------|-------| | **Type** | string | | **Zone** | 1 (top-level) | | **Conformance** | MUST (Level 1) | | **Default** | *(none — explicit declaration required)* |</p>
+<p>**Definition:** Creator of the document. Person name or collaborative attribution.</p>
+<p>**Example:**</p>
+<p>```yaml author: &quot;Tom Cranstoun and Maxine&quot; ```</p>
+<p>**Normative notes:**</p>
+<ul>
+  <li>The `author` field is immutable after creation. Implementations MUST NOT change this value after the document is first committed.</li>
+  <li>For collaborative work, all contributors SHOULD be listed.</li>
+  <li>`author` is distinct from `maintainer` (see Section 7.5). The author is the original creator; the maintainer handles ongoing updates.</li>
+</ul>
+<p>---</p>
+<h3 id="54-created">5.4. `created`</h3>
+<p>| Property | Value | |----------|-------| | **Type** | string | | **Zone** | 1 (top-level) | | **Conformance** | MUST (Level 1) | | **Default** | *(none — explicit declaration required)* |</p>
+<p>**Definition:** Creation date in ISO 8601 format (YYYY-MM-DD).</p>
+<p>**Example:**</p>
+<p>```yaml created: 2026-04-02 ```</p>
+<p>**Normative notes:**</p>
+<ul>
+  <li>The value MUST use ISO 8601 date format (YYYY-MM-DD).</li>
+  <li>This field is immutable — once set, it MUST NOT be changed.</li>
+</ul>
+<p>---</p>
+<h3 id="55-modified">5.5. `modified`</h3>
+<p>| Property | Value | |----------|-------| | **Type** | string | | **Zone** | 1 (top-level) | | **Conformance** | MUST (Level 1) | | **Default** | *(none — explicit declaration required)* |</p>
+<p>**Definition:** Last modification date in ISO 8601 format (YYYY-MM-DD).</p>
+<p>**Example:**</p>
+<p>```yaml modified: 2026-04-16 ```</p>
+<p>**Normative notes:**</p>
+<ul>
+  <li>The value MUST use ISO 8601 date format (YYYY-MM-DD).</li>
+  <li>Implementations MUST update this field every time the document's content changes.</li>
+</ul>
+<p>---</p>
+<h3 id="56-version">5.6. `version`</h3>
+<p>| Property | Value | |----------|-------| | **Type** | string | | **Zone** | 1 (top-level) | | **Conformance** | SHOULD (Level 2) | | **Default** | *(none)* |</p>
+<p>**Definition:** Semantic version string.</p>
+<p>**Example:**</p>
+<p>```yaml version: &quot;2.0&quot; ```</p>
+<p>**Normative notes:**</p>
+<ul>
+  <li>The value MUST be quoted in YAML to prevent numeric coercion (e.g., `&quot;1.0&quot;` not `1.0`).</li>
+  <li>Version numbers live in frontmatter, never in filenames.</li>
+</ul>
+<p>---</p>
+<h2 id="6-field-definitions-zone-2-core-operational-fields">6. Field definitions — Zone 2 core operational fields</h2>
+<h3 id="61-status">6.1. `status`</h3>
+<p>| Property | Value | |----------|-------| | **Type** | string | | **Zone** | 2 (mx:) | | **Conformance** | SHOULD (Level 2) | | **Valid values** | draft, active, published, deprecated, archived, unknown, proposed, accepted, rejected, superseded, pending, review, approved, planning, open, closed, sent, canonical | | **Default** | *(none — explicit declaration recommended)* |</p>
+<p>**Definition:** Lifecycle state. Different document contexts use different subsets of the valid values.</p>
+<p>**Example:**</p>
+<p>```yaml mx: status: active ```</p>
+<p>**Normative notes:**</p>
+<ul>
+  <li>Standard lifecycle values: `draft`, `active`, `published`, `deprecated`, `archived`, `unknown`.</li>
+  <li>Decision record values: `proposed`, `accepted`, `rejected`, `superseded`.</li>
+  <li>Workflow values: `pending`, `review`, `approved`, `planning`, `open`, `closed`, `sent`.</li>
+  <li>Special value: `canonical` (indicates an authoritative reference document).</li>
+  <li>Implementations SHOULD always declare `status` to communicate the document's lifecycle stage.</li>
+</ul>
+<p>---</p>
+<h3 id="62-tags">6.2. `tags`</h3>
+<p>| Property | Value | |----------|-------| | **Type** | array | | **Zone** | 2 (mx:) | | **Conformance** | MAY (Level 3) | | **Default** | *(empty array)* |</p>
+<p>**Definition:** Discovery keywords. Array of strings for search, filtering, and agent matching.</p>
+<p>**Example:**</p>
+<p>```yaml mx: tags: [metadata, yaml, frontmatter, reference] ```</p>
+<p>**Normative notes:**</p>
+<ul>
+  <li>Values SHOULD be lowercase strings.</li>
+  <li>Tags enable discovery; they are distinct from `words` (spell-checker dictionary) and `keyFields` (agent attention routing).</li>
+</ul>
+<p>---</p>
+<h3 id="63-audience">6.3. `audience`</h3>
+<p>| Property | Value | |----------|-------| | **Type** | string-or-array | | **Zone** | 2 (mx:) | | **Conformance** | MAY (Level 3) | | **Valid values** | tech, business, humans, machines, agents, both | | **Default** | *(none)* |</p>
+<p>**Definition:** Intended readership.</p>
+<p>**Example:**</p>
+<p>```yaml mx: audience: [humans, machines] ```</p>
+<p>**Normative notes:**</p>
+<ul>
+  <li>The value MAY be a single string or an array of strings.</li>
+</ul>
+<p>---</p>
+<h3 id="64-purpose">6.4. `purpose`</h3>
+<p>| Property | Value | |----------|-------| | **Type** | string | | **Zone** | 2 (mx:) | | **Conformance** | MAY (Level 3) | | **Valid values** | specification, reference, guide, operational manual, dispatcher, configuration | | **Default** | *(none)* |</p>
+<p>**Definition:** Why this document exists. Distinct from `contentType` (which classifies what a document is, not why it exists).</p>
+<p>**Example:**</p>
+<p>```yaml mx: purpose: reference ```</p>
+<p>---</p>
+<h3 id="65-license">6.5. `license`</h3>
+<p>| Property | Value | |----------|-------| | **Type** | string | | **Zone** | 2 (mx:) | | **Conformance** | MAY (Level 3) | | **Default** | *(none)* |</p>
+<p>**Definition:** SPDX licence identifier.</p>
+<p>**Example:**</p>
+<p>```yaml mx: license: MIT ```</p>
+<p>**Normative notes:**</p>
+<ul>
+  <li>Values MUST use SPDX licence identifiers as defined in the [SPDX Licence List](<a href="https://spdx.org/licenses/)." target="_blank" rel="noreferrer">https://spdx.org/licenses/).</a></li>
+  <li>Common values: `proprietary`, `MIT`, `Apache-2.0`, `CC-BY-4.0`.</li>
+  <li>The field name uses the spelling-neutral form `license` (SPDX standard spelling), following [NDR-03](../naming-decisions/ndr-03-spelling-neutrality.cog.md).</li>
+</ul>
+<p>---</p>
+<h3 id="66-maintainer">6.6. `maintainer`</h3>
+<p>| Property | Value | |----------|-------| | **Type** | string | | **Zone** | 2 (mx:) | | **Conformance** | MAY (Level 3) | | **Default** | *(none)* |</p>
+<p>**Definition:** Person or team responsible for maintaining this document. Distinct from `author` — the maintainer handles ongoing updates while the author is the immutable creator.</p>
+<p>**Example:**</p>
+<p>```yaml mx: maintainer: &quot;Maxine&quot; ```</p>
+<p>**Normative notes:**</p>
+<ul>
+  <li>This field is mutable and MAY change as stewardship transfers.</li>
+  <li>When omitted, the `author` is assumed to also be the maintainer.</li>
+</ul>
+<p>---</p>
+<h3 id="67-ownership">6.7. `ownership`</h3>
+<p>| Property | Value | |----------|-------| | **Type** | string-or-object | | **Zone** | 2 (mx:) | | **Conformance** | MAY (Level 3) | | **Default** | *(none)* |</p>
+<p>**Definition:** Ownership details. Can be a string (owner name) or an object with `owner`, `delegate`, and `contact` sub-fields.</p>
+<p>**Example:**</p>
+<p>```yaml mx: ownership: &quot;Tom Cranstoun&quot; ```</p>
+<p>```yaml mx: ownership: owner: &quot;Tom Cranstoun&quot; delegate: &quot;Maxine&quot; contact: &quot;tom@example.com&quot; ```</p>
+<p>---</p>
+<h3 id="68-domain">6.8. `domain`</h3>
+<p>| Property | Value | |----------|-------| | **Type** | string | | **Zone** | 2 (mx:) | | **Conformance** | MAY (Level 3) | | **Default** | *(none)* |</p>
+<p>**Definition:** Business domain or subject area.</p>
+<p>**Example:**</p>
+<p>```yaml mx: domain: &quot;machine-experience&quot; ```</p>
+<p>**Normative notes:**</p>
+<ul>
+  <li>Values are context-specific and not constrained to an enumeration.</li>
+  <li>In folder metadata, `domain` is an identity field and MUST NOT be inherited by child folders.</li>
+</ul>
+<p>---</p>
+<h3 id="69-contenttype">6.9. `contentType`</h3>
+<p>| Property | Value | |----------|-------| | **Type** | string | | **Zone** | 2 (mx:) | | **Conformance** | SHOULD (Level 2) | | **Default** | *(none)* |</p>
+<p>**Definition:** Machine-readable content type classification.</p>
+<p>**Example:**</p>
+<p>```yaml mx: contentType: field-dictionary ```</p>
+<p>**Normative notes:**</p>
+<ul>
+  <li>Common values include: `specification`, `guide`, `reference`, `info-doc`, `identity`, `report`, `field-dictionary`, `standards-alignment`.</li>
+  <li>This is a free-form classification, not constrained to an enumeration, to allow domain-specific content types.</li>
+</ul>
+<p>---</p>
+<h3 id="610-segment">6.10. `segment`</h3>
+<p>| Property | Value | |----------|-------| | **Type** | string | | **Zone** | 2 (mx:) | | **Conformance** | MAY (Level 3) | | **Valid values** | developer, author, agent, business, morning, afternoon, evening | | **Default** | *(none)* |</p>
+<p>**Definition:** Segment classifier. Used in two contexts: audience segment (developer, author, agent, business) and time segment for session reports (morning, afternoon, evening).</p>
+<p>**Example:**</p>
+<p>```yaml mx: segment: developer ```</p>
+<p>---</p>
+<h3 id="611-cacheability">6.11. `cacheability`</h3>
+<p>| Property | Value | |----------|-------| | **Type** | string | | **Zone** | 2 (mx:) | | **Conformance** | MAY (Level 3) | | **Valid values** | ephemeral, short-lived, medium, long-lived, permanent | | **Default** | medium |</p>
+<p>**Definition:** How long an agent or resolver may cache this document's content before re-fetching.</p>
+<p>**Example:**</p>
+<p>```yaml mx: cacheability: long-lived ```</p>
+<p>**Normative notes:**</p>
+<p>- `ephemeral` — MUST NOT be cached; content changes on every request - `short-lived` — cache for up to 1 hour - `medium` — cache for up to 1 day - `long-lived` — cache for up to 1 week - `permanent` — cache indefinitely until the document changes</p>
+<ul>
+  <li>Named tiers map to durations:</li>
+  <li>A custom duration string (e.g., `4h`, `30d`) is also accepted. Format: number + unit (`s`, `m`, `h`, `d`, `w`).</li>
+  <li>When omitted, implementations SHOULD treat the value as `medium`.</li>
+  <li>Distinct from `stability` (content reliability) and `lifecycle` (development phase).</li>
+</ul>
+<p>---</p>
+<h3 id="612-readinglevel">6.12. `readingLevel`</h3>
+<p>| Property | Value | |----------|-------| | **Type** | string | | **Zone** | 2 (mx:) | | **Conformance** | MAY (Level 3) | | **Valid values** | beginner, intermediate, advanced, expert | | **Default** | *(none)* |</p>
+<p>**Definition:** Content reading level. Helps agents recommend content based on user expertise.</p>
+<p>**Example:**</p>
+<p>```yaml mx: readingLevel: intermediate ```</p>
+<p>---</p>
+<h3 id="613-runbook">6.13. `runbook`</h3>
+<p>| Property | Value | |----------|-------| | **Type** | string | | **Zone** | 2 (mx:) | | **Conformance** | SHOULD (Level 2) | | **Default** | *(none)* |</p>
+<p>**Definition:** Operational instructions for agents. Describes how to interpret and act on this document.</p>
+<p>**Example:**</p>
+<p>```yaml mx: runbook: &quot;Parse the fields array. Each entry has name, type, definition, status, and profile.&quot; ```</p>
+<p>**Normative notes:**</p>
+<ul>
+  <li>The runbook SHOULD be written in imperative voice.</li>
+  <li>The runbook SHOULD be specific enough that an agent can act on it without reading the full document body.</li>
+  <li>This field is particularly valuable for machine-facing documents where the document structure is not self-evident.</li>
+</ul>
+<p>---</p>
+<h3 id="614-confidential">6.14. `confidential`</h3>
+<p>| Property | Value | |----------|-------| | **Type** | boolean | | **Zone** | 2 (mx:) | | **Conformance** | MAY (Level 3) | | **Default** | false |</p>
+<p>**Definition:** Whether this record must be excluded from public outputs.</p>
+<p>**Example:**</p>
+<p>```yaml mx: confidential: true ```</p>
+<p>**Normative notes:**</p>
+<ul>
+  <li>When omitted, the default is `false` (document is public).</li>
+  <li>Authors SHOULD only declare this field when marking content as confidential.</li>
+</ul>
+<p>---</p>
+<h3 id="615-inherits">6.15. `inherits`</h3>
+<p>| Property | Value | |----------|-------| | **Type** | string | | **Zone** | 2 (mx:) | | **Conformance** | MAY (Level 3) | | **Default** | *(none)* |</p>
+<p>**Definition:** Path to the file this document extends. The inheriting file adds MX metadata on top of the target's content. The target can be any file type.</p>
+<p>**Example:**</p>
+<p>```yaml mx: inherits: &quot;README.md&quot; ```</p>
+<p>**Normative notes:**</p>
+<ul>
+  <li>File-type agnostic — the target can be `.md`, `.cog.md`, `.html`, `.json`, `.yaml`, or any other file type.</li>
+  <li>The inheriting file extends the target; it does not replace it.</li>
+  <li>The path MAY be relative or absolute.</li>
+  <li>For folder-level field inheritance, use `inheritable` on the parent folder instead (see [MX Profile-Specific Metadata Standard](deferred/mxs-05-profile-metadata.cog.md) *(deferred)*, folder profile).</li>
+</ul>
+<p>---</p>
+<h3 id="616-ld">6.16. `ld`</h3>
+<p>| Property | Value | |----------|-------| | **Type** | object | | **Zone** | 2 (mx:) | | **Conformance** | MAY (Level 3) | | **Default** | *(none)* |</p>
+<p>**Definition:** Inline JSON-LD (Schema.org) expressed in YAML frontmatter. Enables structured data without a separate `&lt;script&gt;` block.</p>
+<p>**Example:**</p>
+<p>```yaml mx: ld: &quot;@context&quot;: &quot;<a href="https://schema.org&quot;" target="_blank" rel="noreferrer">https://schema.org&quot;</a> &quot;@type&quot;: &quot;TechArticle&quot; name: &quot;MX Core Metadata Standard&quot; ```</p>
+<p>**Normative notes:**</p>
+<ul>
+  <li>The `ld` field provides a YAML representation of JSON-LD structured data.</li>
+  <li>Implementations rendering HTML from this metadata SHOULD convert the `ld` object to a `&lt;script type=&quot;application/ld+json&quot;&gt;` block.</li>
+</ul>
+<p>---</p>
+<h2 id="7-field-definitions-cog-structural-fields">7. Field definitions — Cog structural fields</h2>
+<p>The following fields are specific to cog documents (`.cog.md` files). They provide registry classification, dependency management, and structural composition. All cog structural fields reside in Zone 2 (the `mx:` object).</p>
+<h3 id="71-category">7.1. `category`</h3>
+<p>| Property | Value | |----------|-------| | **Type** | string | | **Zone** | 2 (mx:) | | **Profile** | cog | | **Conformance** | MUST (Level 1) for cog documents | | **Default** | *(none — explicit declaration required)* |</p>
+<p>**Definition:** Cog category. Determines registry grouping.</p>
+<p>**Example:**</p>
+<p>```yaml mx: category: standard ```</p>
+<p>**Normative notes:**</p>
+<ul>
+  <li>Common values: `mx-core`, `mx-tool`, `mx-contact`, `mx-ops`, `mx-content`.</li>
+  <li>This field is REQUIRED for all cog files.</li>
+</ul>
+<p>---</p>
+<h3 id="72-partof">7.2. `partOf`</h3>
+<p>| Property | Value | |----------|-------| | **Type** | string | | **Zone** | 2 (mx:) | | **Profile** | cog | | **Conformance** | MUST (Level 1) for cog documents | | **Default** | *(none — explicit declaration required)* |</p>
+<p>**Definition:** Parent collection, suite, or initiative.</p>
+<p>**Example:**</p>
+<p>```yaml mx: partOf: mx-the-gathering ```</p>
+<p>**Normative notes:**</p>
+<ul>
+  <li>This field is REQUIRED for all cog files. Every cog MUST belong to a named collection.</li>
+</ul>
+<p>---</p>
+<h3 id="73-buildson">7.3. `buildsOn`</h3>
+<p>| Property | Value | |----------|-------| | **Type** | array | | **Zone** | 2 (mx:) | | **Profile** | cog | | **Conformance** | SHOULD (Level 2) for cog documents | | **Default** | *(empty array)* |</p>
+<p>**Definition:** Context graph. Array of cog names this document builds upon. Soft dependency — provides context, not a hard requirement.</p>
+<p>**Example:**</p>
+<p>```yaml mx: buildsOn: [what-is-a-cog, cog-unified-spec] ```</p>
+<p>**Normative notes:**</p>
+<ul>
+  <li>`buildsOn` forms the cog knowledge graph. It is a soft dependency — the referenced cogs provide context but are not required for this cog to function.</li>
+  <li>Distinct from `requires` (hard dependency) and `refersTo` (informational link).</li>
+</ul>
+<p>---</p>
+<h3 id="74-requires">7.4. `requires`</h3>
+<p>| Property | Value | |----------|-------| | **Type** | array | | **Zone** | 2 (mx:) | | **Profile** | cog | | **Conformance** | SHOULD (Level 2) for cog documents | | **Default** | *(empty array)* |</p>
+<p>**Definition:** Hard dependencies. Array of cog names that MUST exist for this cog to function.</p>
+<p>**Example:**</p>
+<p>```yaml mx: requires: [node-runtime, markdownlint-cli2] ```</p>
+<p>**Normative notes:**</p>
+<ul>
+  <li>A cog MUST NOT be considered functional if any of its `requires` entries are missing.</li>
+  <li>Distinct from `buildsOn` (soft context dependency).</li>
+</ul>
+<p>---</p>
+<h3 id="75-refersto">7.5. `refersTo`</h3>
+<p>| Property | Value | |----------|-------| | **Type** | array | | **Zone** | 2 (mx:) | | **Profile** | cog | | **Conformance** | MAY (Level 3) | | **Default** | *(empty array)* |</p>
+<p>**Definition:** Related cogs or external resources. Informational links, not dependencies.</p>
+<p>**Example:**</p>
+<p>```yaml mx: refersTo: [field-dictionary, cog-unified-spec] ```</p>
+<p>---</p>
+<h3 id="76-includes">7.6. `includes`</h3>
+<p>| Property | Value | |----------|-------| | **Type** | array | | **Zone** | 2 (mx:) | | **Profile** | cog | | **Conformance** | MAY (Level 3) | | **Default** | *(empty array)* |</p>
+<p>**Definition:** Cog composition — content reuse without duplication. Array of include declarations, each specifying a source cog, optional block filter, and resolution mode.</p>
+<p>**Example:**</p>
+<p>```yaml mx: includes: - source: &quot;shared/validation-policy.cog.md&quot; blocks: [sop] resolution: build ```</p>
+<p>**Normative notes:**</p>
+<ul>
+  <li>Structural composition. Included content is merged into the cog; the including cog's own content overrides included content of the same type.</li>
+  <li>Distinct from `buildsOn` (soft recommendation) and `requires` (hard dependency).</li>
+  <li>See the [Cog Unified Specification](../specifications/cog-unified-spec.cog.md) for the full inclusion specification.</li>
+</ul>
+<p>---</p>
+<h3 id="77-blocks">7.7. `blocks`</h3>
+<p>| Property | Value | |----------|-------| | **Type** | array | | **Zone** | 2 (mx:) | | **Profile** | cog | | **Conformance** | MAY (Level 3) | | **Valid values** | prose, action, definition, essence, provenance, version, code, html, sop, security | | **Default** | *(none)* |</p>
+<p>**Definition:** Declares block types present in the document body.</p>
+<p>**Example:**</p>
+<p>```yaml mx: blocks: [prose, definition, code] ```</p>
+<p>**Normative notes:**</p>
+<ul>
+  <li>Block types are defined in the [Cog Unified Specification](../specifications/cog-unified-spec.cog.md).</li>
+  <li>The `prose` block is implicit in every cog and need not be declared.</li>
+</ul>
+<p>---</p>
+<h3 id="78-execute">7.8. `execute`</h3>
+<p>| Property | Value | |----------|-------| | **Type** | object | | **Zone** | 2 (mx:) | | **Profile** | cog | | **Conformance** | MAY (Level 3) | | **Default** | *(none)* |</p>
+<p>**Definition:** Action block. Contains runtime, command, actions, and policy. Its presence makes a cog an action-doc.</p>
+<p>**Example:**</p>
+<p>```yaml mx: execute: runtime: node command: &quot;node scripts/validate.js&quot; ```</p>
+<p>**Normative notes:**</p>
+<ul>
+  <li>The presence of an `execute` field distinguishes action-docs from info-docs.</li>
+  <li>Action cogs SHOULD live in the `scripts/` folder.</li>
+</ul>
+<p>---</p>
+<h3 id="79-policy">7.9. `policy`</h3>
+<p>| Property | Value | |----------|-------| | **Type** | string-or-object | | **Zone** | 2 (mx:) | | **Profile** | cog | | **Conformance** | MAY (Level 3) | | **Default** | *(none)* |</p>
+<p>**Definition:** Content handling rules for agents. Inherited from uber docs via effective doc resolution.</p>
+<p>**Example:**</p>
+<p>```yaml mx: policy: &quot;inherit from parent uber-doc&quot; ```</p>
+<p>---</p>
+<h3 id="710-deliverable">7.10. `deliverable`</h3>
+<p>| Property | Value | |----------|-------| | **Type** | string-or-array | | **Zone** | 2 (mx:) | | **Profile** | cog | | **Conformance** | MAY (Level 3) | | **Default** | *(none)* |</p>
+<p>**Definition:** What this cog produces or delivers. Declares the tangible output — a report, a validated artefact, a trained team, a published page.</p>
+<p>**Example:**</p>
+<p>```yaml mx: deliverable: &quot;validated cog registered in REGINALD&quot; ```</p>
+<p>**Normative notes:**</p>
+<ul>
+  <li>For action-docs, describes what running the actions produces.</li>
+  <li>For info-docs, describes the knowledge or artefact the cog represents.</li>
+  <li>The value MAY be an array for cogs with multiple deliverables.</li>
+</ul>
+<p>---</p>
+<h3 id="711-cogid">7.11. `cogId`</h3>
+<p>| Property | Value | |----------|-------| | **Type** | string | | **Zone** | 2 (mx:) | | **Profile** | cog | | **Conformance** | SHOULD (Level 2) for cog documents | | **Default** | *(derived from filename)* |</p>
+<p>**Definition:** Unique cog identifier within the registry.</p>
+<p>**Example:**</p>
+<p>```yaml mx: cogId: &quot;field-dictionary&quot; ```</p>
+<p>**Normative notes:**</p>
+<ul>
+  <li>Typically derived from the filename without the `.cog.md` extension.</li>
+  <li>MUST be unique within the registry.</li>
+</ul>
+<p>---</p>
+<h3 id="712-cogtype">7.12. `cogType`</h3>
+<p>| Property | Value | |----------|-------| | **Type** | string | | **Zone** | 2 (mx:) | | **Profile** | cog | | **Conformance** | SHOULD (Level 2) for cog documents | | **Valid values** | info, action, routing, certificate-of-genuineness | | **Default** | *(none)* |</p>
+<p>**Definition:** Cog type classification.</p>
+<p>**Example:**</p>
+<p>```yaml mx: cogType: info ```</p>
+<p>**Normative notes:**</p>
+<ul>
+  <li>`info` — reference or documentation cog.</li>
+  <li>`action` — has an `execute` block; performs operations.</li>
+  <li>`routing` — agent navigation cog.</li>
+  <li>`certificate-of-genuineness` — publisher-provenanced credential with a publisher block.</li>
+</ul>
+<p>---</p>
+<h2 id="8-conformance-levels-summary">8. Conformance levels summary</h2>
+<h3 id="81-zone-1-identity-fields">8.1. Zone 1 identity fields</h3>
+<p>| Field | Level 1 (MUST) | Level 2 (SHOULD) | Level 3 (MAY) | |-------|:-:|:-:|:-:| | `title` | MUST | — | — | | `description` | MUST | — | — | | `author` | MUST | — | — | | `created` | MUST | — | — | | `modified` | MUST | — | — | | `version` | — | SHOULD | — |</p>
+<h3 id="82-zone-2-core-operational-fields">8.2. Zone 2 core operational fields</h3>
+<p>| Field | Level 1 (MUST) | Level 2 (SHOULD) | Level 3 (MAY) | |-------|:-:|:-:|:-:| | `status` | — | SHOULD | — | | `contentType` | — | SHOULD | — | | `runbook` | — | SHOULD | — | | `tags` | — | — | MAY | | `audience` | — | — | MAY | | `purpose` | — | — | MAY | | `license` | — | — | MAY | | `maintainer` | — | — | MAY | | `ownership` | — | — | MAY | | `domain` | — | — | MAY | | `segment` | — | — | MAY | | `cacheability` | — | — | MAY | | `readingLevel` | — | — | MAY | | `confidential` | — | — | MAY | | `inherits` | — | — | MAY | | `ld` | — | — | MAY |</p>
+<h3 id="83-cog-structural-fields">8.3. Cog structural fields</h3>
+<p>These conformance levels apply only to cog documents (`.cog.md` files).</p>
+<p>| Field | Level 1 (MUST) | Level 2 (SHOULD) | Level 3 (MAY) | |-------|:-:|:-:|:-:| | `category` | MUST | — | — | | `partOf` | MUST | — | — | | `buildsOn` | — | SHOULD | — | | `requires` | — | SHOULD | — | | `cogId` | — | SHOULD | — | | `cogType` | — | SHOULD | — | | `refersTo` | — | — | MAY | | `includes` | — | — | MAY | | `blocks` | — | — | MAY | | `execute` | — | — | MAY | | `policy` | — | — | MAY | | `deliverable` | — | — | MAY |</p>
+<p>---</p>
+<h2 id="9-security-and-privacy-considerations">9. Security and privacy considerations</h2>
+<ul>
+  <li>The `confidential` field controls whether a document is excluded from public outputs. Implementations that generate public artefacts MUST respect this field.</li>
+  <li>The `author` field is immutable and establishes provenance. Implementations MUST NOT allow modification of this field after initial creation.</li>
+  <li>The `ownership` field MAY contain contact information. Implementations that publish metadata publicly SHOULD consider whether `ownership.contact` values are appropriate for public exposure.</li>
+</ul>
+<p>---</p>
+<h2 id="10-references">10. References</h2>
+<h3 id="101-normative-references">10.1. Normative references</h3>
+<div class="ref-list">
+  <div class="ref-entry"><div class="ref-label"></div><div class="ref-text">[Cog Unified Specification](../specifications/cog-unified-spec.cog.md) — the cog document format</div></div>
+  <div class="ref-entry"><div class="ref-label">[[NDR-02]</div><div class="ref-text">camelCase Naming](../naming-decisions/ndr-02-camelcase-naming.cog.md) — field naming convention</div></div>
+  <div class="ref-entry"><div class="ref-label">[[NDR-03]</div><div class="ref-text">Spelling Neutrality](../naming-decisions/ndr-03-spelling-neutrality.cog.md) — spelling-neutral vocabulary</div></div>
+  <div class="ref-entry"><div class="ref-label">[[ADR-02]</div><div class="ref-text">Namespace Policy](../architecture-decisions/adr-02-namespace-policy.cog.md) — namespace governance</div></div>
+  <div class="ref-entry"><div class="ref-label"></div><div class="ref-text">[MX Extensions Standard](mxs-02-extensions.cog.md) — namespace policy, carrier formats, extension mechanisms</div></div>
+  <div class="ref-entry"><div class="ref-label"></div><div class="ref-text">[MX Provenance Standard](mxs-03-provenance.cog.md) — trust, attribution, verification</div></div>
+  <div class="ref-entry"><div class="ref-label"></div><div class="ref-text">[MX AI/Agent Policy Standard](deferred/mxs-04-ai-agent-policy.cog.md) *(deferred)* — AI governance and agent policies</div></div>
+  <div class="ref-entry"><div class="ref-label"></div><div class="ref-text">[MX Profile-Specific Metadata Standard](deferred/mxs-05-profile-metadata.cog.md) *(deferred)* — content-type-specific fields</div></div>
+</div>
+<h3 id="102-informative-references">10.2. Informative references</h3>
+<div class="ref-list">
+  <div class="ref-entry"><div class="ref-label">[[RFC2119](https]</div><div class="ref-text">//www.rfc-editor.org/rfc/rfc2119) — Key words for use in RFCs to indicate requirement levels</div></div>
+  <div class="ref-entry"><div class="ref-label">[[ISO8601](https]</div><div class="ref-text">//www.iso.org/iso-8601-date-and-time-format.html) — Date and time format</div></div>
+  <div class="ref-entry"><div class="ref-label">[[SPDXLicenceList](https]</div><div class="ref-text">//spdx.org/licenses/) — Software Package Data Exchange licence identifiers</div></div>
+  <div class="ref-entry"><div class="ref-label">[[Schema.orgStyleGuide](https]</div><div class="ref-text">//schema.org/docs/styleguide.html) — Vocabulary naming conventions</div></div>
+  <div class="ref-entry"><div class="ref-label">[[DublinCoreDCMINamespace](https]</div><div class="ref-text">//www.dublincore.org/specifications/dublin-core/dcmi-namespace/) — Namespace governance model</div></div>
+  <div class="ref-entry"><div class="ref-label">[[WCAG2.1](https]</div><div class="ref-text">//www.w3.org/TR/WCAG21/) — Web Content Accessibility Guidelines (conformance level model)</div></div>
+  <div class="ref-entry"><div class="ref-label"></div><div class="ref-text">[MX Standards Alignment](../specifications/mx-standards-alignment.cog.md) — how MX conventions align with existing web standards</div></div>
+</div>
+<p>---</p>
+<h2 id="11-change-log">11. Change log</h2>
+<p>| Version | Date | Changes | |---------|------|---------| | 1.0-draft | 2026-04-02 | Initial draft. Initial draft. |</p>
+</section>
+<section class="back">
+<h2 id="acknowledgments">Acknowledgments</h2>
+<p>Tom Cranstoun and Maxine (CogNovaMX). Machine-readable field dictionary: mx-canon/ssot/fields-data.yaml.</p>
+</section>
+<section class="generated-references">
+  <h2 id="12-references">12. References</h2>
+  <h3 id="121-normative-references">12.1. Normative References</h3>
+  <div class="ref-list">
+  <div class="ref-entry"><div class="ref-label">[COG-SPEC]</div><div class="ref-text">MX Cog Unified Specification, &gt;-</div></div>
+</div>
+  <h3 id="122-informative-references">12.2. Informative References</h3>
+  <div class="ref-list">
+  <div class="ref-entry"><div class="ref-label">[MXS-02]</div><div class="ref-text">MX Extensions Standard, <a href="https://github.com/TG-Community/draft-cranstoun-mx-extensions" target="_blank" rel="noreferrer">https://github.com/TG-Community/draft-cranstoun-mx-extensions</a></div></div>
+  <div class="ref-entry"><div class="ref-label">[MXS-03]</div><div class="ref-text">MX Provenance Standard, <a href="https://github.com/TG-Community/draft-cranstoun-mx-provenance" target="_blank" rel="noreferrer">https://github.com/TG-Community/draft-cranstoun-mx-provenance</a></div></div>
+  <div class="ref-entry"><div class="ref-label">[MXS-04]</div><div class="ref-text">MX Carrier Formats Standard, <a href="https://github.com/TG-Community/draft-cranstoun-mx-carrier-formats" target="_blank" rel="noreferrer">https://github.com/TG-Community/draft-cranstoun-mx-carrier-formats</a></div></div>
+</div>
+</section>
+        <p class="stamp">Rendered from draft-cranstoun-mx-core-metadata.md at 2026-04-16T20:19:38.274Z</p>
+      </article>
+      <aside class="toc-panel">
+  <h2 class="toc-title">Table of Contents</h2>
+  <ol class="toc-list">
+    <li class="toc-item toc-level-1"><a href="#1-conformance">1. Conformance</a></li>
+    <li class="toc-item toc-level-2"><a href="#11-conformance-levels">1.1. Conformance levels</a></li>
+    <li class="toc-item toc-level-2"><a href="#12-authoritative-status">1.2. Authoritative status</a></li>
+    <li class="toc-item toc-level-1"><a href="#2-scope-and-relationship-to-other-standards">2. Scope and relationship to other standards</a></li>
+    <li class="toc-item toc-level-2"><a href="#21-what-this-document-covers">2.1. What this document covers</a></li>
+    <li class="toc-item toc-level-2"><a href="#22-what-this-document-does-not-cover">2.2. What this document does not cover</a></li>
+    <li class="toc-item toc-level-2"><a href="#23-relationship-to-existing-standards">2.3. Relationship to existing standards</a></li>
+    <li class="toc-item toc-level-1"><a href="#3-terminology">3. Terminology</a></li>
+    <li class="toc-item toc-level-1"><a href="#4-the-two-zone-frontmatter-model">4. The two-zone frontmatter model</a></li>
+    <li class="toc-item toc-level-1"><a href="#5-field-definitions-zone-1-identity-fields">5. Field definitions — Zone 1 identity fields</a></li>
+    <li class="toc-item toc-level-2"><a href="#51-title">5.1. `title`</a></li>
+    <li class="toc-item toc-level-2"><a href="#52-description">5.2. `description`</a></li>
+    <li class="toc-item toc-level-2"><a href="#53-author">5.3. `author`</a></li>
+    <li class="toc-item toc-level-2"><a href="#54-created">5.4. `created`</a></li>
+    <li class="toc-item toc-level-2"><a href="#55-modified">5.5. `modified`</a></li>
+    <li class="toc-item toc-level-2"><a href="#56-version">5.6. `version`</a></li>
+    <li class="toc-item toc-level-1"><a href="#6-field-definitions-zone-2-core-operational-fields">6. Field definitions — Zone 2 core operational fields</a></li>
+    <li class="toc-item toc-level-2"><a href="#61-status">6.1. `status`</a></li>
+    <li class="toc-item toc-level-2"><a href="#62-tags">6.2. `tags`</a></li>
+    <li class="toc-item toc-level-2"><a href="#63-audience">6.3. `audience`</a></li>
+    <li class="toc-item toc-level-2"><a href="#64-purpose">6.4. `purpose`</a></li>
+    <li class="toc-item toc-level-2"><a href="#65-license">6.5. `license`</a></li>
+    <li class="toc-item toc-level-2"><a href="#66-maintainer">6.6. `maintainer`</a></li>
+    <li class="toc-item toc-level-2"><a href="#67-ownership">6.7. `ownership`</a></li>
+    <li class="toc-item toc-level-2"><a href="#68-domain">6.8. `domain`</a></li>
+    <li class="toc-item toc-level-2"><a href="#69-contenttype">6.9. `contentType`</a></li>
+    <li class="toc-item toc-level-2"><a href="#610-segment">6.10. `segment`</a></li>
+    <li class="toc-item toc-level-2"><a href="#611-cacheability">6.11. `cacheability`</a></li>
+    <li class="toc-item toc-level-2"><a href="#612-readinglevel">6.12. `readingLevel`</a></li>
+    <li class="toc-item toc-level-2"><a href="#613-runbook">6.13. `runbook`</a></li>
+    <li class="toc-item toc-level-2"><a href="#614-confidential">6.14. `confidential`</a></li>
+    <li class="toc-item toc-level-2"><a href="#615-inherits">6.15. `inherits`</a></li>
+    <li class="toc-item toc-level-2"><a href="#616-ld">6.16. `ld`</a></li>
+    <li class="toc-item toc-level-1"><a href="#7-field-definitions-cog-structural-fields">7. Field definitions — Cog structural fields</a></li>
+    <li class="toc-item toc-level-2"><a href="#71-category">7.1. `category`</a></li>
+    <li class="toc-item toc-level-2"><a href="#72-partof">7.2. `partOf`</a></li>
+    <li class="toc-item toc-level-2"><a href="#73-buildson">7.3. `buildsOn`</a></li>
+    <li class="toc-item toc-level-2"><a href="#74-requires">7.4. `requires`</a></li>
+    <li class="toc-item toc-level-2"><a href="#75-refersto">7.5. `refersTo`</a></li>
+    <li class="toc-item toc-level-2"><a href="#76-includes">7.6. `includes`</a></li>
+    <li class="toc-item toc-level-2"><a href="#77-blocks">7.7. `blocks`</a></li>
+    <li class="toc-item toc-level-2"><a href="#78-execute">7.8. `execute`</a></li>
+    <li class="toc-item toc-level-2"><a href="#79-policy">7.9. `policy`</a></li>
+    <li class="toc-item toc-level-2"><a href="#710-deliverable">7.10. `deliverable`</a></li>
+    <li class="toc-item toc-level-2"><a href="#711-cogid">7.11. `cogId`</a></li>
+    <li class="toc-item toc-level-2"><a href="#712-cogtype">7.12. `cogType`</a></li>
+    <li class="toc-item toc-level-1"><a href="#8-conformance-levels-summary">8. Conformance levels summary</a></li>
+    <li class="toc-item toc-level-2"><a href="#81-zone-1-identity-fields">8.1. Zone 1 identity fields</a></li>
+    <li class="toc-item toc-level-2"><a href="#82-zone-2-core-operational-fields">8.2. Zone 2 core operational fields</a></li>
+    <li class="toc-item toc-level-2"><a href="#83-cog-structural-fields">8.3. Cog structural fields</a></li>
+    <li class="toc-item toc-level-1"><a href="#9-security-and-privacy-considerations">9. Security and privacy considerations</a></li>
+    <li class="toc-item toc-level-1"><a href="#10-references">10. References</a></li>
+    <li class="toc-item toc-level-2"><a href="#101-normative-references">10.1. Normative references</a></li>
+    <li class="toc-item toc-level-2"><a href="#102-informative-references">10.2. Informative references</a></li>
+    <li class="toc-item toc-level-1"><a href="#11-change-log">11. Change log</a></li>
+    <li class="toc-item toc-level-1"><a href="#12-references">12. References</a></li>
+    <li class="toc-item toc-level-2"><a href="#121-normative-references">12.1. Normative References</a></li>
+    <li class="toc-item toc-level-2"><a href="#122-informative-references">12.2. Informative References</a></li>
+    <li class="toc-item toc-level-1"><a href="#acknowledgments">Acknowledgments</a></li>
+  </ol>
+</aside>
+    </div>
+  </main>
+</body>
+</html>
